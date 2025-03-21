@@ -52,15 +52,15 @@ namespace Sakani.DA.Dbinitializer
 
                 var adminUser = new User
                 {
-                    UserName = "YoussefKamal",
-                    Email = "Youssefkamal@gmail.com",
+                    UserName = "SakaniTeam",
+                    Email = "SakaniTeam@gmail.com",
                     password = "123456789k",
-                    PhoneNumber = "1234567890",
+                    PhoneNumber = "+201551134280",
                 };
                 _userManager.CreateAsync(adminUser, "123456789k").GetAwaiter().GetResult();
 
                 User user = _db.Users.FirstOrDefault(p => p.Email == "Youssefkamal@gmail.com");
-                _userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
+                _userManager.AddToRoleAsync(user, UserRole.Admin.ToString()).GetAwaiter().GetResult();
             }
 
         }
