@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakani", "Sakani\Sakani.csproj", "{97D13E6D-4802-4C09-B10F-237F1F16C56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakani.Data", "Sakani.Data\Sakani.Data.csproj", "{374CB5E7-8219-446A-A9AD-CD8E9A91CE6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakani.DA", "Sakani.DA\Sakani.DA.csproj", "{09754AFB-C800-4235-9779-907D07BCE763}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97D13E6D-4802-4C09-B10F-237F1F16C56A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D13E6D-4802-4C09-B10F-237F1F16C56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D13E6D-4802-4C09-B10F-237F1F16C56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D13E6D-4802-4C09-B10F-237F1F16C56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374CB5E7-8219-446A-A9AD-CD8E9A91CE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374CB5E7-8219-446A-A9AD-CD8E9A91CE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374CB5E7-8219-446A-A9AD-CD8E9A91CE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374CB5E7-8219-446A-A9AD-CD8E9A91CE6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09754AFB-C800-4235-9779-907D07BCE763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09754AFB-C800-4235-9779-907D07BCE763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09754AFB-C800-4235-9779-907D07BCE763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09754AFB-C800-4235-9779-907D07BCE763}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
