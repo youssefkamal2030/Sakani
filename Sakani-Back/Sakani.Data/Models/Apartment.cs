@@ -28,7 +28,7 @@ namespace Sakani.Data.Models
         public bool IsWifi { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

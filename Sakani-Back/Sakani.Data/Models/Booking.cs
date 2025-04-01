@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Sakani.Data.Models
 {
-    public class Feedback
+    public class Booking
     {
         [Key]
-        public Guid FeedbackId { get; set; }
+        public Guid BookingId { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
@@ -25,10 +25,20 @@ namespace Sakani.Data.Models
         [ForeignKey("ApartmentId")]
         public virtual Apartment Apartment { get; set; }
 
-        [Range(1, 5)]
-        public int Rate { get; set; }
+        [Required]
+        public DateTime BookingDate { get; set; }
 
-        [StringLength(500)]
-        public string Comment { get; set; }
+        [Required]
+        public DateTime FromDate { get; set; }
+
+        [Required]
+        public DateTime ToDate { get; set; }
+
+        [StringLength(50)]
+        public string Status { get; set; } 
+
+        public bool Confirmed { get; set; }
+
+        public bool Canceled { get; set; }
     }
 }

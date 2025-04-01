@@ -10,8 +10,13 @@ namespace Sakani.Data.Models
 {
     public class UserProfile
     {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; }
+
         [Key, ForeignKey("User")]
-        public Guid UserId { get; set; }
+
+        public string UserId { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 

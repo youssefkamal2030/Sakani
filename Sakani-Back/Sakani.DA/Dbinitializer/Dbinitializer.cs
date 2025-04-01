@@ -11,17 +11,17 @@ using Sakani.Data.Models;
 
 namespace Sakani.DA.Dbinitializer
 {
-    public class Dbinitializer
+    public class Dbinitializer : IDbinitializer
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SakaniDbContext _db;
-        private readonly ILogger _logger;
+        private readonly ILogger<Dbinitializer> _logger;
 
         public Dbinitializer(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             SakaniDbContext db,
-            ILogger logger)
+            ILogger<Dbinitializer> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -31,7 +31,7 @@ namespace Sakani.DA.Dbinitializer
 
         public void Initialize()
         {
-           
+
             try
             {
                 if (_db.Database.GetPendingMigrations().Count() > 0)
@@ -41,7 +41,7 @@ namespace Sakani.DA.Dbinitializer
             }
             catch (Exception ex)
             {
-               _logger.LogError(ex, "Error in migration");
+                _logger.LogError(ex, "Error in migration");
             }
 
             if (!_roleManager.RoleExistsAsync(UserRole.Customer.ToString()).GetAwaiter().GetResult())
@@ -59,8 +59,15 @@ namespace Sakani.DA.Dbinitializer
                 };
                 _userManager.CreateAsync(adminUser, "123456789k").GetAwaiter().GetResult();
 
-                User user = _db.Users.FirstOrDefault(p => p.Email == "Youssefkamal@gmail.com");
-                _userManager.AddToRoleAsync(user, UserRole.Admin.ToString()).GetAwaiter().GetResult();
+                User user = _db.Users.FirstOrDefault(p => p.Email == "SakaniTeam@gmail.com");
+                if (user != null)
+                {
+                    _userManager.AddToRoleAsync(user, UserRole.Admin.ToString()).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    _logger.LogError($"User with email {adminUser.Email} not found.");
+                }
             }
 
         }

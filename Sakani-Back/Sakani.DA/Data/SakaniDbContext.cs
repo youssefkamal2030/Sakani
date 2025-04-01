@@ -11,6 +11,7 @@ namespace Sakani.DA.Data
 {
     public class SakaniDbContext : IdentityDbContext<User>
     {
+      
         public SakaniDbContext(DbContextOptions<SakaniDbContext> options) : base(options)
         {
 

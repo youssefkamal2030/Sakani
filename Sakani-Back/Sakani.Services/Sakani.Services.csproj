@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Serivces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sakani.Contracts\Sakani.Contracts.csproj" />
+    <ProjectReference Include="..\Sakani.Data\Sakani.Data.csproj" />
+  </ItemGroup>
+
+</Project>
