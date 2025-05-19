@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="DTO\" />
+    <Folder Include="DTO\" />
     <Folder Include="Profiles\" />
   </ItemGroup>
 

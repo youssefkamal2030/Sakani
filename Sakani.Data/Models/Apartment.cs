@@ -5,9 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sakani.Data.Models
 {
+    [Index(nameof(UserId))]
     public class Apartment
     {
         [Key]
@@ -28,10 +30,25 @@ namespace Sakani.Data.Models
         public bool IsWifi { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
+        public decimal Price { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; }
+
+        [StringLength(255)]
+        public string Location { get; set; }
+
+        [StringLength(255)]
+        public string MainImage { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 

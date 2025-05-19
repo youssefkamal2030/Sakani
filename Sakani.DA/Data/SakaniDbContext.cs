@@ -20,68 +20,119 @@ namespace Sakani.DA.Data
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Owner> Owners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             // 1) User <-> UserProfile (1:1)
-            // Typically, a profile is just an extension of User, so we can safely cascade.
             modelBuilder.Entity<User>()
                 .HasOne(u => u.UserProfile)
                 .WithOne(up => up.User)
                 .HasForeignKey<UserProfile>(up => up.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 2) User <-> Apartments (1:N)
-            // Restrict deleting a User if they still have Apartments. 
-            // This prevents accidental data loss and multiple cascade paths.
+            // 2) User <-> Student (1:1)
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Student)
+                .WithOne(s => s.User)
+                .HasForeignKey<Student>(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 3) User <-> Owner (1:1)
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Owner)
+                .WithOne(o => o.User)
+                .HasForeignKey<Owner>(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 4) User <-> Apartments (1:N)
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Apartments)
                 .WithOne(a => a.User)
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 3) User <-> Bookings (1:N)
-            // Restrict deleting a User if they still have Bookings.
+            // 5) User <-> Bookings (1:N)
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Bookings)
                 .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 4) User <-> Feedback (1:N)
-            // Restrict deleting a User if they still have Feedback.
+            // 6) User <-> Feedback (1:N)
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Feedbacks)
                 .WithOne(f => f.User)
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 5) Apartment <-> Bookings (1:N)
-            // Restrict deleting an Apartment if there are Bookings referencing it.
-            // This is common so you don't accidentally wipe out booking history.
+            // 7) Apartment <-> Bookings (1:N)
             modelBuilder.Entity<Apartment>()
                 .HasMany(a => a.Bookings)
                 .WithOne(b => b.Apartment)
                 .HasForeignKey(b => b.ApartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 6) Apartment <-> Feedback (1:N)
-            // Restrict deleting an Apartment if there is Feedback referencing it.
+            // 8) Apartment <-> Feedback (1:N)
             modelBuilder.Entity<Apartment>()
                 .HasMany(a => a.Feedbacks)
                 .WithOne(f => f.Apartment)
                 .HasForeignKey(f => f.ApartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Example Index on Email (unique constraint)
+            // Configure enum conversions
+            modelBuilder.Entity<Student>()
+                .Property(s => s.Gender)
+                .HasMaxLength(10)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Owner>()
+                .Property(o => o.Gender)
+                .HasMaxLength(10)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Owner>()
+                .Property(o => o.VerificationStatus)
+                .HasMaxLength(20)
+                .HasConversion<string>();
+
+            // Additional indexes
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Additional configuration or seed data as needed...
-        }
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.NormalizedEmail)
+                .HasDatabaseName("EmailIndex");
 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.NormalizedUserName)
+                .HasDatabaseName("UserNameIndex")
+                .IsUnique();
+
+            // Set up auto-include for related entities
+            modelBuilder.Entity<Apartment>()
+                .Navigation(a => a.User)
+                .AutoInclude();
+
+            modelBuilder.Entity<Booking>()
+                .Navigation(b => b.User)
+                .AutoInclude();
+
+            modelBuilder.Entity<Booking>()
+                .Navigation(b => b.Apartment)
+                .AutoInclude();
+
+            modelBuilder.Entity<Feedback>()
+                .Navigation(f => f.User)
+                .AutoInclude();
+
+            modelBuilder.Entity<Feedback>()
+                .Navigation(f => f.Apartment)
+                .AutoInclude();
+        }
     }
 }
