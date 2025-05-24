@@ -1,0 +1,21 @@
+.home-page {
+    padding: 2rem;
+    font-family: 'Cairo', sans-serif;
+    background-color: #F8F8F8;
+    direction: rtl;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #395C6B;
+    margin-bottom: 2rem;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  

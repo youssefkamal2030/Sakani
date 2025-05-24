@@ -1,0 +1,24 @@
+.hero-section {
+    background-image: url('E:\Computer_Science\Graduation_Project\Sakany\pics\HeroSection.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 180px 20px;
+    text-align: center;
+    color: #ffffff;
+    direction: rtl;
+    font-family: 'Cairo', sans-serif;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .hero-filters {
+    margin: 0 auto;
+    max-width: 900px;
+  }

@@ -1,0 +1,58 @@
+.our-services {
+    background-color: #e6e1c5;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 40px;
+    margin: 2rem auto;
+  }
+  
+  .our-services-title {
+    font-size: 2.5rem;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .our-services-subtitle {
+    color: #4a4a4a;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .services-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .service-card {
+    background-color: white;
+    border-radius: 28px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  
+  .service-info {
+    padding: 1rem;
+  }
+  
+  .service-info h3 {
+    font-size: 1.3rem;
+    color: #395c6b;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .service-info p {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: center;
+  }
+  

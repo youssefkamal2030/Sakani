@@ -1,0 +1,42 @@
+.filter-bar {
+    background-color: rgba(230, 225, 197, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+.filter-bar select,
+.filter-bar button {
+  padding: 0.1rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-width: 150px;
+  font-family: 'Cairo', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.filter-bar select {
+  background-color: #F7F7F7;
+  color: #333;
+}
+
+.filter-bar button {
+  background-color: #395C6B;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-bar button:hover {
+    background-color: #F95738;
+    color: #ffffff;
+}

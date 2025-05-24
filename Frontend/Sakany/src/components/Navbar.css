@@ -1,0 +1,50 @@
+.navbar {
+    background-color: #395c6b;
+    /*background-image: url('E:\Computer_Science\Graduation_Project\Sakany\pics/Navbar.jpg');
+    background-position: bottom;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+  }
+  
+  .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  
+  .nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links li a:hover {
+    color: #F95738;
+  }
+  
+  .login-button a {
+    background-color: #ffffff;
+    color: #395C6B;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+  
+  .login-button a:hover {
+    background-color: #7a928c;
+    color: #ffffff;
+  }
+  
