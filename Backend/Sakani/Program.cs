@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sakani.DA;
 using Sakani.DA.Data;
@@ -14,6 +15,11 @@ namespace Sakani
             builder.Services.AddDbContext<SakaniDbContext>(options =>
      options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllers();
+
+            //Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<SakaniDbContext>()
+                .AddDefaultTokenProviders();
 
             //Repositories 
             builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
