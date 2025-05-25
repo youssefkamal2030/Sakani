@@ -14,6 +14,7 @@ namespace Sakani.DA.Interfaces
         Task<int> GetTotalRoomsCountAsync();
         Task<IEnumerable<Room>> GetRoomsByTypeAsync(string roomType, int? skip = null, int? take = null);
         Task<Room> GetRoomWithDetailsAsync(int roomId);
+        Task<bool> UpdateRoomCapacityAsync(int roomId, int numberOfBeds);
     }
 }
  
