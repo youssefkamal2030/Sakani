@@ -9,7 +9,6 @@ namespace Sakni.Sevices.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly 
         public Task<(bool IsSuccess, string Message)> ChangePasswordAsync(string email, string oldPassword, string newPassword)
         {
             throw new NotImplementedException();

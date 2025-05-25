@@ -21,9 +21,6 @@ namespace Sakani.Data.Models
         public User()
         {
             CreatedOn = DateTime.UtcNow;
-            Apartments = new List<Apartment>();
-            Bookings = new List<Booking>();
-            Feedbacks = new List<Feedback>();
         }
 
         [Required]
@@ -36,15 +33,11 @@ namespace Sakani.Data.Models
         [Required]
         public UserRole Role { get; set; }
 
-        
+        public string password { get; set; }
         public virtual Student Student { get; set; }
         
         public virtual Owner Owner { get; set; }
 
-        public virtual ICollection<Apartment> Apartments { get; set; }
-
-        public virtual ICollection<Booking> Bookings { get; set; }
-
-        public virtual ICollection<Feedback> Feedbacks { get; set; }
+     
     }
 }

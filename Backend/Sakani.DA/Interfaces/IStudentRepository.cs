@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sakani.Data.Models;
 
-namespace Sakani.DA
+namespace Sakani.DA.Interfaces
 {
-    public interface IStudentRepository
+    public interface IStudentRepository : IGenericRepository<Student>
     {
-        Task<IEnumerable<Student>> GetAllStudents();
-        Task<Student> GetStudentById(int id);
-        Task<Student> GetStudentByUserId(string userId);
-        Task<Student> AddStudent(Student student);
-        Task<Student> UpdateStudent(Student student);
-        Task<bool> DeleteStudent(int id);
-        Task<bool> StudentExists(int id);
-        Task<IEnumerable<Student>> GetStudentsByCollege(string collegeName);
-        Task<IEnumerable<Student>> GetStudentsByOrigin(string origin);
+        Task<Student> GetStudentByUserIdAsync(string userId);
+        Task<IEnumerable<Student>> GetStudentsByCollegeAsync(string collegeName, int? skip = null, int? take = null);
+        Task<IEnumerable<Student>> GetStudentsByOriginAsync(string origin, int? skip = null, int? take = null);
+        Task<IEnumerable<Student>> GetStudentsWithBookingsAsync(int? skip = null, int? take = null);
+        Task<Student> GetStudentWithDetailsAsync(Guid studentId);
+        Task<bool> UpdateStudentProfileAsync(Student student);
+        Task<int> GetTotalStudentsCountAsync();
+        Task<IEnumerable<Student>> SearchStudentsAsync(string searchTerm, int? skip = null, int? take = null);
+        Task<Student> AddStudentAsync(Student student);
+        Task<Student> UpdateStudentAsync(Student student);
+        Task<bool> DeleteStudentAsync(Guid id);
+        Task<Student> GetStudentByIdAsync(Guid id);
+        Task<IEnumerable<Student>> GetAllStudentsAsync(int? skip = null, int? take = null);
+        Task<bool> StudentExistsAsync(Guid id);
     }
 } 

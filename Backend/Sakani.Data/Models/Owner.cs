@@ -12,21 +12,25 @@ namespace Sakani.Data.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
 
         [Required]
         public string UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+      
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string LastName { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
 
         [Required]
         [StringLength(200)]
-        public string Residence { get; set; }
+        public string? Residence { get; set; }
 
         [Required]
         [StringLength(10)]
@@ -41,7 +45,7 @@ namespace Sakani.Data.Models
         public string PhoneNumber { get; set; }
 
         [StringLength(255)]
-        public string ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -51,5 +55,9 @@ namespace Sakani.Data.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<Apartment> Apartments { get; set; } = new List<Apartment>();
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
     }
 } 

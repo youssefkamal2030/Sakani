@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Sakani.Data.Models
 {
-    public class Rooms
+    public class Room
     {
         public int Id { get; set; }
-        public int ApartmentId { get; set; }
+        public Guid ApartmentId { get; set; }
         public string RoomType { get; set; }
         public int NumberOfBeds { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -18,7 +18,8 @@ namespace Sakani.Data.Models
 
         [ForeignKey("ApartmentId")]
         public virtual Apartment Apartment { get; set; }
-     
+        public virtual ICollection<Bed> Beds { get; set; } = new List<Bed>();
+
 
     }
 }

@@ -13,17 +13,20 @@ namespace Sakani.Data.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         [Required]
         public string UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string LastName { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
 
         [Required]
         [StringLength(100)]
@@ -36,7 +39,7 @@ namespace Sakani.Data.Models
         public string Origin { get; set; }
 
         [StringLength(255)]
-        public string ProfilePhoto { get; set; }
+        public string? ProfilePhoto { get; set; }
 
         [Required]
         [StringLength(10)]
@@ -46,5 +49,9 @@ namespace Sakani.Data.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 } 

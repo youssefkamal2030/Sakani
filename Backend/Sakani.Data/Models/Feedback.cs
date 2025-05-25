@@ -29,7 +29,7 @@ namespace Sakani.Data.Models
         public virtual Apartment Apartment { get; set; }
 
         [Range(1, 5)]
-        public int Rate { get; set; }
+        public int? Rate { get; set; }
 
         [StringLength(500)]
         public string Comment { get; set; }

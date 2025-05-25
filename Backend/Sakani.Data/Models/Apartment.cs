@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Sakani.Data.Models
 {
-    [Index(nameof(UserId))]
+    [Index(nameof(OwnerId))]
     public class Apartment
     {
         [Key]
@@ -17,34 +17,27 @@ namespace Sakani.Data.Models
 
         [Required]
         [StringLength(150)]
-        public string Name { get; set; }
+        public string ApartmentTitle { get; set; }
 
         public int NumberOfRooms { get; set; }
 
         public int NumberOfBeds { get; set; }
 
-        public bool IsVacant { get; set; }
-
-        public bool IsAC { get; set; }
-
-        public bool IsWifi { get; set; }
+        public bool? IsWifi { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public Guid? OwnerId { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
-
-        public decimal Price { get; set; }
+   
 
         [StringLength(500)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [StringLength(255)]
         public string Location { get; set; }
 
         [StringLength(255)]
-        public string MainImage { get; set; }
+        public string? MainImage { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -53,5 +46,10 @@ namespace Sakani.Data.Models
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
+        public virtual ICollection<Room> Rooms { get; set; } = new List<Room>();
+        [ForeignKey("OwnerId")]
+        public virtual Owner Owner { get; set; }
+
     }
 }

@@ -10,8 +10,11 @@ namespace Sakani.Data.Models
     public class Area
     {
         [Key]
-        string AreaId { get; set; }
+       public  string AreaId { get; set; }
 
-        string Name { get; set; }
+        public string Name { get; set; }
+
+        [MaxLength(500)]
+       public  string? location { get; set; }
     }
 }

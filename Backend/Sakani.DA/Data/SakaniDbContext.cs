@@ -16,123 +16,122 @@ namespace Sakani.DA.Data
 
         }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Owner> Owners { get; set; }
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Bed> Beds { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // 1) User <-> UserProfile (1:1)
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.UserProfile)
-                .WithOne(up => up.User)
-                .HasForeignKey<UserProfile>(up => up.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // 2) User <-> Student (1:1)
+            // User-Student cascade delete
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Student)
                 .WithOne(s => s.User)
                 .HasForeignKey<Student>(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 3) User <-> Owner (1:1)
+            // User-Owner cascade delete
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Owner)
                 .WithOne(o => o.User)
                 .HasForeignKey<Owner>(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 4) User <-> Apartments (1:N)
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Apartments)
-                .WithOne(a => a.User)
-                .HasForeignKey(a => a.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // Owner-Apartment cascade delete
+            modelBuilder.Entity<Owner>()
+                .HasMany(o => o.Apartments)
+                .WithOne(a => a.Owner)
+                .HasForeignKey(a => a.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 5) User <-> Bookings (1:N)
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Bookings)
-                .WithOne(b => b.User)
-                .HasForeignKey(b => b.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // Apartment-Room cascade delete
+            modelBuilder.Entity<Apartment>()
+                .HasMany(a => a.Rooms)
+                .WithOne(r => r.Apartment)
+                .HasForeignKey(r => r.ApartmentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 6) User <-> Feedback (1:N)
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Feedbacks)
-                .WithOne(f => f.User)
-                .HasForeignKey(f => f.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // Room-Bed cascade delete
+            modelBuilder.Entity<Room>()
+                .HasMany(r => r.Beds)
+                .WithOne(b => b.Room)
+                .HasForeignKey(b => b.RoomId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 7) Apartment <-> Bookings (1:N)
+            // Student-Booking relationship (changed to NoAction)
+            modelBuilder.Entity<Student>()
+                .HasMany(s => s.Bookings)
+                .WithOne(b => b.Student)
+                .HasForeignKey(b => b.stuendtId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Apartment-Booking relationship (NoAction)
             modelBuilder.Entity<Apartment>()
                 .HasMany(a => a.Bookings)
                 .WithOne(b => b.Apartment)
                 .HasForeignKey(b => b.ApartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // 8) Apartment <-> Feedback (1:N)
+            // Apartment-Feedback relationship (NoAction)
             modelBuilder.Entity<Apartment>()
                 .HasMany(a => a.Feedbacks)
                 .WithOne(f => f.Apartment)
                 .HasForeignKey(f => f.ApartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // Configure enum conversions
-            modelBuilder.Entity<Student>()
-                .Property(s => s.Gender)
-                .HasMaxLength(10)
-                .HasConversion<string>();
+            // Feedback-User relationship (NoAction)
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Owner>()
-                .Property(o => o.Gender)
-                .HasMaxLength(10)
-                .HasConversion<string>();
+            // Bed-Student relationship (NoAction)
+            modelBuilder.Entity<Bed>()
+                .HasOne(b => b.Student)
+                .WithMany()
+                .HasForeignKey(b => b.studentId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Owner>()
-                .Property(o => o.VerificationStatus)
-                .HasMaxLength(20)
-                .HasConversion<string>();
-
-            // Additional indexes
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.NormalizedEmail)
-                .HasDatabaseName("EmailIndex");
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.NormalizedUserName)
-                .HasDatabaseName("UserNameIndex")
-                .IsUnique();
-
-            // Set up auto-include for related entities
+            // Configure indexes
             modelBuilder.Entity<Apartment>()
-                .Navigation(a => a.User)
-                .AutoInclude();
+                .HasIndex(a => a.OwnerId);
+
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.UserId);
+
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.CollegeName);
+
+            modelBuilder.Entity<Student>()
+                .HasIndex(s => s.Origin);
+
+            modelBuilder.Entity<Owner>()
+                .HasIndex(o => o.UserId);
+
+            modelBuilder.Entity<Owner>()
+                .HasIndex(o => o.VerificationStatus);
 
             modelBuilder.Entity<Booking>()
-                .Navigation(b => b.User)
-                .AutoInclude();
+                .HasIndex(b => b.stuendtId);
 
             modelBuilder.Entity<Booking>()
-                .Navigation(b => b.Apartment)
-                .AutoInclude();
+                .HasIndex(b => b.ApartmentId);
+
+            modelBuilder.Entity<Booking>()
+                .HasIndex(b => b.Status);
 
             modelBuilder.Entity<Feedback>()
-                .Navigation(f => f.User)
-                .AutoInclude();
+                .HasIndex(f => f.UserId);
 
             modelBuilder.Entity<Feedback>()
-                .Navigation(f => f.Apartment)
-                .AutoInclude();
+                .HasIndex(f => f.ApartmentId);
         }
     }
 }

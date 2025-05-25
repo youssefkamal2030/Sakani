@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Sakani.Data.Models;
 
-namespace Sakani.DA
+namespace Sakani.DA.Interfaces
 {
-    public interface IApartmentRepository
+    public interface IApartmentRepository : IGenericRepository<Apartment>
     {
-        Task<IEnumerable<Apartment>> GetAllApartments();
-        Task<Apartment> GetApartmentById(int id);
-        Task<Apartment> AddApartment(Apartment apartment);
-        Task<Apartment> UpdateApartment(Apartment apartment);
-        Task<bool> DeleteApartment(int id);
-        Task<IEnumerable<Apartment>> GetApartmentsByOwnerId(string ownerId);
-        Task<bool> ApartmentExists(int id);
+        Task<IEnumerable<Apartment>> GetApartmentsByOwnerIdAsync(Guid ownerId, int? skip = null, int? take = null);
+        Task<Apartment> GetApartmentWithDetailsAsync(Guid apartmentId);
+        Task<IEnumerable<Apartment>> GetAvailableApartmentsAsync(int? skip = null, int? take = null);
+        Task<IEnumerable<Apartment>> SearchApartmentsAsync(string searchTerm, int? skip = null, int? take = null);
+        Task<IEnumerable<Apartment>> GetApartmentsByLocationAsync(string location, int? skip = null, int? take = null);
+        Task<IEnumerable<Apartment>> GetApartmentsWithRoomsAsync(int? skip = null, int? take = null);
+        Task<int> GetTotalApartmentsCountAsync();
+        Task<bool> UpdateApartmentStatusAsync(Guid apartmentId, bool isAvailable);
+        Task<IEnumerable<Apartment>> GetApartmentsWithFeedbacksAsync(int? skip = null, int? take = null);
+        Task<decimal> GetAverageRatingAsync(Guid apartmentId);
     }
 }
