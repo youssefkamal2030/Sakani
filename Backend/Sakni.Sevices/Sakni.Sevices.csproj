@@ -10,4 +10,8 @@
     <Folder Include="Profiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sakani.DA\Sakani.DA.csproj" />
+  </ItemGroup>
+
 </Project>
