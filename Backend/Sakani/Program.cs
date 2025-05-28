@@ -1,11 +1,18 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sakani.DA;
 using Sakani.DA.Data;
 using Sakani.DA.Interfaces;
 using Sakani.DA.Mapping;
 using Sakani.DA.Repositories;
+using Sakani.DA.UnitOfWork;
 using Sakani.Data.Models;
+using Sakni.Services;
+using Sakni.Services.Implementations;
+using Sakni.Sevices.Interfaces;
 namespace Sakani
 {
     public class Program
@@ -32,7 +39,36 @@ namespace Sakani
             //automapper
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"])),
+                    ClockSkew = TimeSpan.Zero // Removes default 5-minute tolerance
+                };
+            });
+            builder.Services.AddAuthorization();
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
             // Register repositories
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IStudentRepository,StudentRepository>();
             builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
             builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
@@ -40,6 +76,18 @@ namespace Sakani
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             builder.Services.AddScoped<IBedRepository, BedRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+            //Services
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<IOwnerService, OwnerService>();
+            builder.Services.AddScoped<IApartmentService, ApartmentService>();
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IBedService, BedService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -53,11 +101,13 @@ namespace Sakani
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+         
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseCors("AllowAllOrigins");
+
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

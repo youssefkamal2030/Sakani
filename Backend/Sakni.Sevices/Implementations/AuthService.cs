@@ -34,37 +34,43 @@ public class AuthService : IAuthService
         {
             Success = true,
             Token = token,
-            ExpiresAt = DateTime.UtcNow.AddHours(1),
+            ExpiresAt = DateTime.UtcNow.AddHours(2),
             User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
         };
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
-        var userExists = await _userManager.FindByEmailAsync(request.Email);
-        if (userExists != null)
-            return new AuthResponse { Success = false, Message = "User already exists." };
-
-        var user = new User
+        try
         {
-            UserName = request.UserName,
-            Email = request.Email,
-        };
+            var userExists = await _userManager.FindByEmailAsync(request.Email);
+            if (userExists != null)
+                return new AuthResponse { Success = false, Message = "User already exists." };
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+            var user = new User
+            {
+                Name = request.FirstName,
+                UserName = request.UserName,
+                Email = request.Email,
+                password = request.Password,
+            };
 
-        if (!result.Succeeded)
-            return new AuthResponse { Success = false, Message = string.Join(", ", result.Errors) };
+            var result = await _userManager.CreateAsync(user, request.Password);
 
-        var token = _tokenService.GenerateJwtToken(user);
+            if (!result.Succeeded)
+                return new AuthResponse { Success = false, Message = "Registration Failed", Errors = result.Errors.Select(e => e.Description).ToList() };
 
-        return new AuthResponse
+
+            return new AuthResponse
+            {
+                Success = true,
+                User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
+            };
+        }
+        catch (Exception ex)
         {
-            Success = true,
-            Token = token,
-            ExpiresAt = DateTime.UtcNow.AddHours(1),
-            User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
-        };
+            return new AuthResponse { Success = false, Message = "An error occurred during registration.", Errors = new List<string> { ex.Message } };
+        }
     }
 
     public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request)

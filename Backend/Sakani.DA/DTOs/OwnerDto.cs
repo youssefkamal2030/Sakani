@@ -20,10 +20,10 @@ namespace Sakani.DA.DTOs
     public class CreateOwnerDto
     {
         public string Name { get; set; }
-        public string Residence { get; set; }
-        public string Gender { get; set; }
-        public string Religion { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? Residence { get; set; }
+        public string? Gender { get; set; }
+        public string? Religion { get; set; }
+        public string? PhoneNumber { get; set; }
     }
 
     public class UpdateOwnerDto

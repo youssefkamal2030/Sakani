@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sakni.Sevices.Implementations
+namespace Sakni.Services.Implementations
 {
     public class OwnerService : IOwnerService
     {

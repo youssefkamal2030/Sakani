@@ -17,9 +17,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Sakani.Data\Sakani.Data.csproj" />
     <ProjectReference Include="..\Sakani.DA\Sakani.DA.csproj" />
+    <ProjectReference Include="..\Sakni.Sevices\Sakni.Sevices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 

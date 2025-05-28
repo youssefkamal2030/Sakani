@@ -176,7 +176,6 @@ namespace Sakani.DA.Repositories
             var apartment = await _context.Apartments.FindAsync(apartmentId);
             if (apartment == null) return false;
 
-            // Update all beds in the apartment to match the availability
             var beds = await _context.Beds
                 .Where(b => b.Room.ApartmentId == apartmentId)
                 .ToListAsync();

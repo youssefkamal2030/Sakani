@@ -6,7 +6,7 @@ using Sakani.DA.Interfaces;
 using Sakani.Data.Models;
 using Sakni.Sevices.Interfaces;
 
-namespace Sakni.Sevices.Implementations
+namespace Sakni.Services.Implementations
 {
     public class FeedbackService : IFeedbackService
     {
