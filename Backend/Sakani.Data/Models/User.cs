@@ -13,7 +13,6 @@ namespace Sakani.Data.Models
         Admin,
         Owner,
         Student,
-        Customer 
     }
 
     public class User : IdentityUser
@@ -22,11 +21,6 @@ namespace Sakani.Data.Models
         {
             CreatedOn = DateTime.UtcNow;
         }
-
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
-
         [Required]
         public DateTime CreatedOn { get; set; }
 

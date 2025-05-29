@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Sakani.DA;
 using Sakani.DA.Data;
+using Sakani.DA.Dbinitializer;
 using Sakani.DA.Interfaces;
 using Sakani.DA.Mapping;
 using Sakani.DA.Repositories;
@@ -17,9 +18,12 @@ namespace Sakani
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Logging.AddConsole(); //---> debuge to the console
+            builder.Logging.AddDebug(); //--> debuge to visual studio
 
             // Add services to the container.
             builder.Services.AddDbContext<SakaniDbContext>(options =>
@@ -58,8 +62,15 @@ namespace Sakani
                     ClockSkew = TimeSpan.Zero // Removes default 5-minute tolerance
                 };
             });
-            builder.Services.AddAuthorization();
-            // Configure CORS
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("OwnerOnly", policy => policy.RequireRole("Owner"));
+                options.AddPolicy("StudentOnly", policy => policy.RequireRole("Student"));
+                options.AddPolicy("OwnerOrAdmin", policy => policy.RequireRole("Owner", "Admin"));
+            });           
+            
+            //CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins",
@@ -67,6 +78,7 @@ namespace Sakani
                                       .AllowAnyMethod()
                                       .AllowAnyHeader());
             });
+            
             // Register repositories
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IStudentRepository,StudentRepository>();
@@ -78,6 +90,7 @@ namespace Sakani
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
             //Services
+            builder.Services.AddScoped<Dbinitializer>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IStudentService, StudentService>();
@@ -94,7 +107,11 @@ namespace Sakani
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetRequiredService<Dbinitializer>();
+                await dbInitializer.InitializeAsync();
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -112,6 +129,8 @@ namespace Sakani
             app.MapControllers();
 
             app.Run();
+
         }
+      
     }
 }

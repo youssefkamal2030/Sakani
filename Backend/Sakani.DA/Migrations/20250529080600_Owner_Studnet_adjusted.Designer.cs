@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sakani.DA.Data;
 
@@ -11,9 +12,11 @@ using Sakani.DA.Data;
 namespace Sakani.DA.Migrations
 {
     [DbContext(typeof(SakaniDbContext))]
-    partial class SakaniDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529080600_Owner_Studnet_adjusted")]
+    partial class Owner_Studnet_adjusted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sakani.Data.Models;
@@ -14,26 +15,33 @@ public class TokenService : ITokenService
     private readonly string _secretKey;
     private readonly string _issuer;
     private readonly string _audience;
+    private readonly UserManager<User> _userManager;
 
-    public TokenService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, UserManager<User> userManager)
     {
         _configuration = configuration;
+        _userManager = userManager;
         _secretKey = _configuration["Jwt:SecretKey"];
         _issuer = _configuration["Jwt:Issuer"];
         _audience = _configuration["Jwt:Audience"];
     }
 
-    public string GenerateJwtToken(User user)
+    public async Task<string> GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_secretKey);
-
-        var claims = new[]
+        var key = Encoding.UTF8.GetBytes(_secretKey);
+        var roles = await _userManager.GetRolesAsync(user);
+        var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email),
-        };
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
+        };
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

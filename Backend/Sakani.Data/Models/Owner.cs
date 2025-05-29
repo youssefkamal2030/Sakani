@@ -28,26 +28,23 @@ namespace Sakani.Data.Models
 
         public string FullName => $"{FirstName} {LastName}";
 
-        [Required]
         [StringLength(200)]
         public string? Residence { get; set; }
 
-        [Required]
         [StringLength(10)]
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
 
         [StringLength(50)]
-        public string Religion { get; set; }
+        public string? Religion { get; set; }
 
-        [Required]
+       
         [StringLength(20)]
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [StringLength(255)]
         public string? ProfilePhoto { get; set; }
 
-        [Required]
         [StringLength(20)]
         public string VerificationStatus { get; set; } = "Not Verified";
 

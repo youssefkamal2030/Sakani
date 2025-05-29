@@ -4,18 +4,31 @@ using Microsoft.AspNetCore.Identity;
 using Sakani.Data.Models;
 using Sakani.DA.DTOs;
 using Sakni.Sevices.Interfaces;
+using Sakani.DA.Interfaces;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenService _tokenService;
+    private readonly IOwnerService _ownerService;
+    private readonly IStudentService _studentService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService)
+    public AuthService(UserManager<User> userManager, 
+        SignInManager<User> signInManager, 
+        ITokenService tokenService, 
+        IOwnerService ownerService, 
+        IStudentService studentService,
+        IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
+        _ownerService = ownerService;
+        _studentService = studentService;
+        _unitOfWork = unitOfWork;
+
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
@@ -33,7 +46,7 @@ public class AuthService : IAuthService
         return new AuthResponse
         {
             Success = true,
-            Token = token,
+            Token = token.ToString(),
             ExpiresAt = DateTime.UtcNow.AddHours(2),
             User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
         };
@@ -41,6 +54,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
+        await _unitOfWork.BeginTransactionAsync();
         try
         {
             var userExists = await _userManager.FindByEmailAsync(request.Email);
@@ -49,26 +63,51 @@ public class AuthService : IAuthService
 
             var user = new User
             {
-                Name = request.FirstName,
                 UserName = request.UserName,
                 Email = request.Email,
                 password = request.Password,
+                Role = (UserRole)Enum.Parse(typeof(UserRole), request.Role, ignoreCase:true)
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
-
+            
             if (!result.Succeeded)
                 return new AuthResponse { Success = false, Message = "Registration Failed", Errors = result.Errors.Select(e => e.Description).ToList() };
 
-
+            if(request.Role ==UserRole.Owner.ToString())
+            {
+                var Owner = new CreateOwnerDto
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    UserId = user.Id
+                };
+                await _ownerService.CreateOwnerAsync(Owner);
+                await _userManager.AddToRoleAsync(user, UserRole.Owner.ToString());
+                
+            }
+            if(request.Role == UserRole.Student.ToString())
+            {
+                var Student = new CreateStudentDto 
+                { 
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    UserId = user.Id
+                };
+                await _studentService.CreateStudentAsync(Student);
+                await _userManager.AddToRoleAsync(user,UserRole.Student.ToString());
+            }
+            _unitOfWork.CommitTransactionAsync();
             return new AuthResponse
             {
                 Success = true,
-                User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
+                User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName,
+                    Role = (UserRole)Enum.Parse(typeof(UserRole), request.Role, ignoreCase: true)                }
             };
         }
         catch (Exception ex)
         {
+            _unitOfWork.RollbackTransactionAsync();
             return new AuthResponse { Success = false, Message = "An error occurred during registration.", Errors = new List<string> { ex.Message } };
         }
     }

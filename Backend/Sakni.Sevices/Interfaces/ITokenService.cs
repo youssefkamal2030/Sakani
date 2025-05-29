@@ -10,7 +10,7 @@ namespace Sakni.Sevices.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateJwtToken(User user);
+        Task<string> GenerateJwtToken(User user);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
         Task<bool> ValidateTokenAsync(string token);
     

@@ -28,22 +28,21 @@ namespace Sakani.Data.Models
 
         public string FullName => $"{FirstName} {LastName}";
 
-        [Required]
+        
         [StringLength(100)]
-        public string CollegeName { get; set; }
+        public string? CollegeName { get; set; }
 
         
-        public int Age { get; set; }
+        public int? Age { get; set; }
 
         [StringLength(100)]
-        public string Origin { get; set; }
+        public string? Origin { get; set; }
 
         [StringLength(255)]
         public string? ProfilePhoto { get; set; }
 
-        [Required]
         [StringLength(10)]
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

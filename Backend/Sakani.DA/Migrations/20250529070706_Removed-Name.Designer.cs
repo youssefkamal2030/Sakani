@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sakani.DA.Data;
 
@@ -11,9 +12,11 @@ using Sakani.DA.Data;
 namespace Sakani.DA.Migrations
 {
     [DbContext(typeof(SakaniDbContext))]
-    partial class SakaniDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529070706_Removed-Name")]
+    partial class RemovedName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,6 +370,7 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -376,6 +380,7 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -384,10 +389,12 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Religion")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Residence")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -450,10 +457,11 @@ namespace Sakani.DA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Age")
+                    b.Property<int>("Age")
                         .HasColumnType("int");
 
                     b.Property<string>("CollegeName")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -466,6 +474,7 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -475,6 +484,7 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Origin")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

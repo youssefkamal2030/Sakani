@@ -6,7 +6,9 @@ namespace Sakani.DA.DTOs
     {
         public Guid StudentId { get; set; }
         public string UserId { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
         public string CollegeName { get; set; }
         public int Age { get; set; }
         public string Origin { get; set; }
@@ -18,16 +20,19 @@ namespace Sakani.DA.DTOs
 
     public class CreateStudentDto
     {
-        public string Name { get; set; }
-        public string CollegeName { get; set; }
-        public int Age { get; set; }
-        public string Origin { get; set; }
-        public string Gender { get; set; }
+        public string UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string? CollegeName { get; set; }
+        public int? Age { get; set; }
+        public string? Origin { get; set; }
+        public string? Gender { get; set; }
     }
 
     public class UpdateStudentDto
     {
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string CollegeName { get; set; }
         public int Age { get; set; }
         public string Origin { get; set; }

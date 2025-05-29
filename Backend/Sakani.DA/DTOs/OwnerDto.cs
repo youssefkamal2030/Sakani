@@ -6,7 +6,9 @@ namespace Sakani.DA.DTOs
     {
         public Guid OwnerId { get; set; }
         public string UserId { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
         public string Residence { get; set; }
         public string Gender { get; set; }
         public string Religion { get; set; }
@@ -19,7 +21,9 @@ namespace Sakani.DA.DTOs
 
     public class CreateOwnerDto
     {
-        public string Name { get; set; }
+        public string UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string? Residence { get; set; }
         public string? Gender { get; set; }
         public string? Religion { get; set; }
@@ -28,7 +32,8 @@ namespace Sakani.DA.DTOs
 
     public class UpdateOwnerDto
     {
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Residence { get; set; }
         public string Religion { get; set; }
         public string PhoneNumber { get; set; }

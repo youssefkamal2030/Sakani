@@ -16,12 +16,12 @@ namespace Sakani.DA.Dbinitializer
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SakaniDbContext _db;
-        private readonly ILogger _logger;
+        private readonly ILogger<Dbinitializer> _logger;
 
         public Dbinitializer(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             SakaniDbContext db,
-            ILogger logger)
+            ILogger<Dbinitializer> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -29,26 +29,25 @@ namespace Sakani.DA.Dbinitializer
             _logger = logger;
         }
 
-        public void Initialize()
+        public async Task InitializeAsync()
         {
-           
             try
             {
                 if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
-                    _db.Database.Migrate();
+                    await _db.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-               _logger.LogError(ex, "Error in migration");
+                _logger.LogError(ex, "Error in migration");
             }
 
-            if (!_roleManager.RoleExistsAsync(UserRole.Customer.ToString()).GetAwaiter().GetResult())
+            if (!await _roleManager.RoleExistsAsync(UserRole.Student.ToString()))
             {
-                _roleManager.CreateAsync(new IdentityRole(UserRole.Admin.ToString())).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(UserRole.Owner.ToString())).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(UserRole.Customer.ToString())).GetAwaiter().GetResult();
+                await _roleManager.CreateAsync(new IdentityRole(UserRole.Admin.ToString()));
+                await _roleManager.CreateAsync(new IdentityRole(UserRole.Owner.ToString()));
+                await _roleManager.CreateAsync(new IdentityRole(UserRole.Student.ToString()));
 
                 var adminUser = new User
                 {
@@ -57,12 +56,26 @@ namespace Sakani.DA.Dbinitializer
                     password = "123456789k",
                     PhoneNumber = "+201551134280",
                 };
-                _userManager.CreateAsync(adminUser, "123456789k").GetAwaiter().GetResult();
 
-                User user = _db.Users.FirstOrDefault(p => p.Email == "Youssefkamal@gmail.com");
-                _userManager.AddToRoleAsync(user, UserRole.Admin.ToString()).GetAwaiter().GetResult();
+                var result = await _userManager.CreateAsync(adminUser, "123456789k");
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Failed to create admin user: {Errors}", 
+                        string.Join(", ", result.Errors.Select(e => e.Description)));
+                    return;
+                }
+
+                var user = await _db.Users.FirstOrDefaultAsync(p => p.Email == "SakaniTeam@gmail.com");
+                if (user != null)
+                {
+                    var roleResult = await _userManager.AddToRoleAsync(user, UserRole.Admin.ToString());
+                    if (!roleResult.Succeeded)
+                    {
+                        _logger.LogError("Failed to assign admin role: {Errors}", 
+                            string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                    }
+                }
             }
-
         }
     }
 }
