@@ -9,7 +9,7 @@ namespace Sakani.Data.Models
 {
     public class Bed
     {   
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int RoomId { get; set; }
         public Guid? studentId { get; set; } 
 

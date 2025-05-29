@@ -225,11 +225,9 @@ namespace Sakani.DA.Migrations
 
             modelBuilder.Entity("Sakani.Data.Models.Bed", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -270,8 +268,8 @@ namespace Sakani.DA.Migrations
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BedId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BedId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
@@ -659,14 +657,16 @@ namespace Sakani.DA.Migrations
             modelBuilder.Entity("Sakani.Data.Models.Booking", b =>
                 {
                     b.HasOne("Sakani.Data.Models.Apartment", "Apartment")
-                        .WithMany("Bookings")
+                        .WithMany()
                         .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Sakani.Data.Models.Bed", null)
+                    b.HasOne("Sakani.Data.Models.Bed", "Bed")
                         .WithMany("Bookings")
-                        .HasForeignKey("BedId");
+                        .HasForeignKey("BedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Sakani.Data.Models.Student", "Student")
                         .WithMany("Bookings")
@@ -675,6 +675,8 @@ namespace Sakani.DA.Migrations
                         .IsRequired();
 
                     b.Navigation("Apartment");
+
+                    b.Navigation("Bed");
 
                     b.Navigation("Student");
                 });
@@ -690,7 +692,7 @@ namespace Sakani.DA.Migrations
                     b.HasOne("Sakani.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Apartment");
@@ -733,8 +735,6 @@ namespace Sakani.DA.Migrations
 
             modelBuilder.Entity("Sakani.Data.Models.Apartment", b =>
                 {
-                    b.Navigation("Bookings");
-
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Rooms");

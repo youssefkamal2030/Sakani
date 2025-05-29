@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Sakani.DA.DTOs;
 using Sakani.DA.Interfaces;
 using Sakani.Data.Models;
@@ -14,11 +15,13 @@ namespace Sakni.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;    
 
-        public OwnerService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OwnerService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<OwnerDto> CreateOwnerAsync(CreateOwnerDto request)
@@ -30,7 +33,20 @@ namespace Sakni.Services.Implementations
 
         public async Task<bool> DeleteOwnerAsync(Guid id)
         {
-            return await _unitOfWork.Owners.DeleteAsync(id);
+            try
+            {
+                Owner Owner = await _unitOfWork.Owners.GetByIdAsync(id);
+                var user = await _userManager.FindByIdAsync(Owner.UserId);
+                await _userManager.DeleteAsync(user);
+                return true;
+            }
+            catch (Exception ex) {
+                throw new Exception(ex.Message);
+                return false;
+            }
+
+            
+            
         }
 
         public async Task<IEnumerable<OwnerDto>> GetAllOwnersAsync(int? skip = null, int? take = null)
@@ -64,6 +80,13 @@ namespace Sakni.Services.Implementations
 
             _mapper.Map(request, existing);
             var updated = await _unitOfWork.Owners.UpdateAsync(existing);
+            var user =await _userManager.FindByIdAsync(existing.UserId);
+            if(user!= null)
+            {
+                user.UserName = request.fullName;
+                user.Email = request.email;
+                await _userManager.UpdateAsync(user);
+            }
             return _mapper.Map<OwnerDto>(updated);
         }
 

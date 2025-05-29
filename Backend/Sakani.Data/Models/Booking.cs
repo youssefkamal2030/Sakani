@@ -24,6 +24,9 @@ namespace Sakani.Data.Models
         public Guid ApartmentId { get; set; }
 
         [Required]
+        public Guid BedId { get; set; }
+
+        [Required]
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
 
         [Required]
@@ -33,8 +36,8 @@ namespace Sakani.Data.Models
         public bool Confirmed { get; set; } = false;
 
         public bool Canceled { get; set; } = false;
-        [Column(TypeName = "decimal(18,2)")]
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? TotalPrice { get; set; }
 
         [StringLength(500)]
@@ -50,5 +53,7 @@ namespace Sakani.Data.Models
         [ForeignKey("ApartmentId")]
         public virtual Apartment Apartment { get; set; }
 
+        [ForeignKey("BedId")]
+        public virtual Bed Bed { get; set; }
     }
 }

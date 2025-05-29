@@ -12,8 +12,8 @@ using Sakani.DA.Data;
 namespace Sakani.DA.Migrations
 {
     [DbContext(typeof(SakaniDbContext))]
-    [Migration("20250525075043_init")]
-    partial class init
+    [Migration("20250529135328_CleanMigrationToAddBedId")]
+    partial class CleanMigrationToAddBedId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -228,11 +228,9 @@ namespace Sakani.DA.Migrations
 
             modelBuilder.Entity("Sakani.Data.Models.Bed", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -273,8 +271,8 @@ namespace Sakani.DA.Migrations
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BedId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BedId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
@@ -364,18 +362,21 @@ namespace Sakani.DA.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Gender")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -384,12 +385,10 @@ namespace Sakani.DA.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Religion")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Residence")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -452,29 +451,31 @@ namespace Sakani.DA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
                     b.Property<string>("CollegeName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Gender")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Origin")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -528,11 +529,6 @@ namespace Sakani.DA.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -664,14 +660,16 @@ namespace Sakani.DA.Migrations
             modelBuilder.Entity("Sakani.Data.Models.Booking", b =>
                 {
                     b.HasOne("Sakani.Data.Models.Apartment", "Apartment")
-                        .WithMany("Bookings")
+                        .WithMany()
                         .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Sakani.Data.Models.Bed", null)
+                    b.HasOne("Sakani.Data.Models.Bed", "Bed")
                         .WithMany("Bookings")
-                        .HasForeignKey("BedId");
+                        .HasForeignKey("BedId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Sakani.Data.Models.Student", "Student")
                         .WithMany("Bookings")
@@ -680,6 +678,8 @@ namespace Sakani.DA.Migrations
                         .IsRequired();
 
                     b.Navigation("Apartment");
+
+                    b.Navigation("Bed");
 
                     b.Navigation("Student");
                 });
@@ -695,7 +695,7 @@ namespace Sakani.DA.Migrations
                     b.HasOne("Sakani.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Apartment");
@@ -738,8 +738,6 @@ namespace Sakani.DA.Migrations
 
             modelBuilder.Entity("Sakani.Data.Models.Apartment", b =>
                 {
-                    b.Navigation("Bookings");
-
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Rooms");

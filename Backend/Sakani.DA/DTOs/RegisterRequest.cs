@@ -21,9 +21,8 @@ namespace Sakani.DA.DTOs
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string UserName { get; set; }
+      
+        public string UserName => $"{FirstName}{LastName}";
 
         [Required]
         [StringLength(100, MinimumLength = 6)]

@@ -43,8 +43,6 @@ namespace Sakani.Data.Models
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
         public virtual ICollection<Room> Rooms { get; set; } = new List<Room>();

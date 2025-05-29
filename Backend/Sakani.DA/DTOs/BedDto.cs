@@ -4,7 +4,7 @@ namespace Sakani.DA.DTOs
 {
     public class BedDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int RoomId { get; set; }
         public Guid? StudentId { get; set; }
         public decimal Price { get; set; }

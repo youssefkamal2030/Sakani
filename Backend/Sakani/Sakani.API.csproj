@@ -20,9 +20,4 @@
     <ProjectReference Include="..\Sakni.Sevices\Sakni.Sevices.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

@@ -41,14 +41,14 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return new AuthResponse { Success = false, Message = "Invalid credentials." };
 
-        var token = _tokenService.GenerateJwtToken(user);
+        var token = await _tokenService.GenerateJwtToken(user);
 
         return new AuthResponse
         {
             Success = true,
             Token = token.ToString(),
             ExpiresAt = DateTime.UtcNow.AddHours(2),
-            User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName }
+            User = null
         };
     }
 

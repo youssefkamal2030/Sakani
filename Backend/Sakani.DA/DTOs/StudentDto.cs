@@ -33,6 +33,8 @@ namespace Sakani.DA.DTOs
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Fullname => $"{FirstName}{LastName}";
+        public string email { get; set; }
         public string CollegeName { get; set; }
         public int Age { get; set; }
         public string Origin { get; set; }

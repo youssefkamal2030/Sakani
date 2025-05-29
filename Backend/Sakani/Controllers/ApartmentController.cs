@@ -45,7 +45,7 @@ namespace Sakani.Controllers
             return Ok(apartments);
         }
 
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Owner , Admin")]
         [HttpPost]
         public async Task<ActionResult<ApartmentDto>> CreateApartment([FromBody] CreateApartmentDto request)
         {
@@ -53,7 +53,7 @@ namespace Sakani.Controllers
             return CreatedAtAction(nameof(GetApartmentById), new { id = apartment.ApartmentId }, apartment);
         }
 
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Owner , Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<ApartmentDto>> UpdateApartment(Guid id, [FromBody] UpdateApartmentDto request)
         {
@@ -64,7 +64,7 @@ namespace Sakani.Controllers
             return Ok(apartment);
         }
 
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Owner , Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteApartment(Guid id)
         {

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sakani.DA.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace Sakni.Services
 {
@@ -15,11 +16,12 @@ namespace Sakni.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public StudentService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        public StudentService(IUnitOfWork unitOfWork, IMapper mapper,UserManager<User> usermanager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = usermanager;
         }
 
         public async Task<StudentDto> GetStudentByIdAsync(Guid id)
@@ -74,16 +76,35 @@ namespace Sakni.Services
             var existing = await _unitOfWork.Students.GetStudentByIdAsync(id);
             if (existing == null) return null;
 
-            _mapper.Map(request, existing); // Maps properties from request to existing student
+            _mapper.Map(request, existing);
             existing.UpdatedAt = DateTime.UtcNow;
 
             var updated = await _unitOfWork.Students.UpdateStudentAsync(existing);
+            var user = await _userManager.FindByIdAsync(existing.UserId);
+            if (user != null)
+            {
+                user.UserName = request.Fullname;
+                user.Email = request.email;
+                await _userManager.UpdateAsync(user);
+            }
             return _mapper.Map<StudentDto>(updated);
         }
 
         public async Task<bool> DeleteStudentAsync(Guid id)
         {
-            return await _unitOfWork.Students.DeleteStudentAsync(id);
+            try
+            {
+                var student = await _unitOfWork.Students.GetByIdAsync(id);
+                var user = await _userManager.FindByIdAsync(student.UserId);
+                await _userManager.DeleteAsync(user);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+                return false;
+            }
+            
         }
 
         public async Task<IEnumerable<StudentDto>> SearchStudentsAsync(string searchTerm, int? skip = null, int? take = null)

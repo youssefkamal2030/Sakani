@@ -44,7 +44,7 @@ namespace Sakani.DA.Repositories
 
         public async Task<bool> ExistsAsync(object id)
         {
-            return await _context.Beds.AnyAsync(b => b.Id == (int)id);
+            return await _context.Beds.AnyAsync(b => b.Id == (Guid)id);
         }
 
         public async Task<IEnumerable<Bed>> FindAsync(Expression<Func<Bed, bool>> predicate)
@@ -97,7 +97,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<Bed> GetBedWithStudentAsync(int bedId)
+        public async Task<Bed> GetBedWithStudentAsync(Guid bedId)
         {
             return await _context.Beds
                 .Include(b => b.Student)
@@ -117,7 +117,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<bool> UpdateBedStatusAsync(int bedId, bool isVacant)
+        public async Task<bool> UpdateBedStatusAsync(Guid bedId, bool isVacant)
         {
             var bed = await _context.Beds.FindAsync(bedId);
             if (bed == null) return false;
@@ -127,7 +127,7 @@ namespace Sakani.DA.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> AssignStudentToBedAsync(int bedId, Guid studentId)
+        public async Task<bool> AssignStudentToBedAsync(Guid bedId, Guid studentId)
         {
             var bed = await _context.Beds.FindAsync(bedId);
             if (bed == null || !bed.IsVacant) return false;
@@ -138,7 +138,7 @@ namespace Sakani.DA.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RemoveStudentFromBedAsync(int bedId)
+        public async Task<bool> RemoveStudentFromBedAsync(Guid bedId)
         {
             var bed = await _context.Beds.FindAsync(bedId);
             if (bed == null) return false;
@@ -167,7 +167,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<Bed> GetBedWithDetailsAsync(int bedId)
+        public async Task<Bed> GetBedWithDetailsAsync(Guid bedId)
         {
             return await _context.Beds
                 .Include(b => b.Student)
@@ -176,7 +176,7 @@ namespace Sakani.DA.Repositories
                 .FirstOrDefaultAsync(b => b.Id == bedId);
         }
 
-        public async Task<bool> UpdateBedPriceAsync(int bedId, decimal newPrice)
+        public async Task<bool> UpdateBedPriceAsync(Guid bedId, decimal newPrice)
         {
             var bed = await _context.Beds.FindAsync(bedId);
             if (bed == null) return false;

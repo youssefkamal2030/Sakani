@@ -30,24 +30,24 @@ namespace Sakni.Services.Implementations
             return _mapper.Map<BedDto>(created);
         }
 
-        public async Task<bool> DeleteBedAsync(int id)
+        public async Task<bool> DeleteBedAsync(Guid id)
         {
             return await _bedRepository.DeleteAsync(id);
         }
 
-        public async Task<BedDto> GetBedByIdAsync(int id)
+        public async Task<BedDto> GetBedByIdAsync(Guid id)
         {
             var bed = await _bedRepository.GetByIdAsync(id);
             return _mapper.Map<BedDto>(bed);
         }
 
-        public async Task<BedDto> GetBedWithDetailsAsync(int bedId)
+        public async Task<BedDto> GetBedWithDetailsAsync(Guid bedId)
         {
             var bed = await _bedRepository.GetBedWithDetailsAsync(bedId);
             return _mapper.Map<BedDto>(bed);
         }
 
-        public async Task<BedDto> GetBedWithStudentAsync(int bedId)
+        public async Task<BedDto> GetBedWithStudentAsync(Guid bedId)
         {
             var bed = await _bedRepository.GetBedWithStudentAsync(bedId);
             return _mapper.Map<BedDto>(bed);
@@ -76,27 +76,27 @@ namespace Sakni.Services.Implementations
             return await _bedRepository.GetTotalBedsCountAsync();
         }
 
-        public async Task<bool> AssignStudentToBedAsync(int bedId, Guid studentId)
+        public async Task<bool> AssignStudentToBedAsync(Guid bedId, Guid studentId)
         {
             return await _bedRepository.AssignStudentToBedAsync(bedId, studentId);
         }
 
-        public async Task<bool> RemoveStudentFromBedAsync(int bedId)
+        public async Task<bool> RemoveStudentFromBedAsync(Guid bedId)
         {
             return await _bedRepository.RemoveStudentFromBedAsync(bedId);
         }
 
-        public async Task<bool> UpdateBedPriceAsync(int bedId, decimal newPrice)
+        public async Task<bool> UpdateBedPriceAsync(Guid bedId, decimal newPrice)
         {
             return await _bedRepository.UpdateBedPriceAsync(bedId, newPrice);
         }
 
-        public async Task<bool> UpdateBedStatusAsync(int bedId, bool isVacant)
+        public async Task<bool> UpdateBedStatusAsync(Guid bedId, bool isVacant)
         {
             return await _bedRepository.UpdateBedStatusAsync(bedId, isVacant);
         }
 
-        public async Task<BedDto> UpdateBedAsync(int id, UpdateBedDto request)
+        public async Task<BedDto> UpdateBedAsync(Guid id, UpdateBedDto request)
         {
             var bed = await _bedRepository.GetByIdAsync(id);
             if (bed == null)
