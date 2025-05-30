@@ -172,12 +172,12 @@ namespace Sakani.DA.Repositories
         public async Task<IEnumerable<Student>> SearchStudentsAsync(string searchTerm, int? skip = null, int? take = null)
         {
             var query = _context.Students
-        .Include(s => s.User)  // Include the User entity
+        .Include(s => s.User)  
         .Where(s => s.FirstName.Contains(searchTerm) || 
                    s.LastName.Contains(searchTerm) || 
                    s.CollegeName.Contains(searchTerm) ||
-                   s.User.Email.Contains(searchTerm) ||  // Search in User's email
-                   s.User.UserName.Contains(searchTerm)); // Search in User's username
+                   s.User.Email.Contains(searchTerm) || 
+                   s.User.UserName.Contains(searchTerm)); 
 
     if (skip.HasValue)
         query = query.Skip(skip.Value);

@@ -10,7 +10,7 @@ namespace Sakani.Data.Models
     public class Bed
     {   
         public Guid Id { get; set; }
-        public int RoomId { get; set; }
+        public Guid RoomId { get; set; }
         public Guid? studentId { get; set; } 
 
         [Column(TypeName = "decimal(18,2)")] 

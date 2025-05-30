@@ -32,7 +32,7 @@ namespace Sakani.Controllers
 
         [HttpGet("room/{roomId}")]
         [Authorize(Roles = "Admin,Owner")]
-        public async Task<IActionResult> GetBedsByRoomId(int roomId, [FromQuery] int? skip = null, [FromQuery] int? take = null)
+        public async Task<IActionResult> GetBedsByRoomId(Guid roomId, [FromQuery] int? skip = null, [FromQuery] int? take = null)
         {
             var beds = await _bedService.GetBedsByRoomIdAsync(roomId, skip, take);
             return Ok(beds);

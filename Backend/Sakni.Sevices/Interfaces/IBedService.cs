@@ -10,7 +10,7 @@ namespace Sakni.Sevices.Interfaces
     public interface IBedService
     {
         Task<BedDto> GetBedByIdAsync(Guid id);
-        Task<IEnumerable<BedDto>> GetBedsByRoomIdAsync(int roomId, int? skip = null, int? take = null);
+        Task<IEnumerable<BedDto>> GetBedsByRoomIdAsync(Guid roomId, int? skip = null, int? take = null);
         Task<BedDto> CreateBedAsync(CreateBedDto request);
         Task<BedDto> UpdateBedAsync(Guid id, UpdateBedDto request);
         Task<bool> DeleteBedAsync(Guid id);

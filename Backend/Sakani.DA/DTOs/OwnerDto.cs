@@ -32,13 +32,13 @@ namespace Sakani.DA.DTOs
 
     public class UpdateOwnerDto
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string fullName => $"{FirstName}{LastName}";
-        public string email { get; set; }
-        public string Residence { get; set; }
-        public string Religion { get; set; }
-        public string PhoneNumber { get; set; }
-        public string ProfilePhoto { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? fullName => $"{FirstName}{LastName}";
+        public string? email { get; set; }
+        public string? Residence { get; set; }
+        public string? Religion { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 } 

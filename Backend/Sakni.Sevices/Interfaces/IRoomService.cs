@@ -9,15 +9,15 @@ namespace Sakni.Sevices.Interfaces
 {
     public interface IRoomService
     {
-        Task<RoomDto> GetRoomByIdAsync(int id);
+        Task<RoomDto> GetRoomByIdAsync(Guid id);
         Task<IEnumerable<RoomDto>> GetRoomsByApartmentIdAsync(Guid apartmentId, int? skip = null, int? take = null);
         Task<RoomDto> CreateRoomAsync(CreateRoomDto request);
-        Task<RoomDto> UpdateRoomAsync(int id, UpdateRoomDto request);
-        Task<bool> DeleteRoomAsync(int id);
-        Task<RoomDto> GetRoomWithBedsAsync(int roomId);
+        Task<RoomDto> UpdateRoomAsync(Guid id, UpdateRoomDto request);
+        Task<bool> DeleteRoomAsync(Guid id);
+        Task<RoomDto> GetRoomWithBedsAsync(Guid roomId);
         Task<int> GetTotalRoomsCountAsync();
         Task<IEnumerable<RoomDto>> GetRoomsByTypeAsync(string roomType, int? skip = null, int? take = null);
-        Task<RoomDto> GetRoomWithDetailsAsync(int roomId);
-        Task<bool> UpdateRoomCapacityAsync(int roomId, int numberOfBeds);
+        Task<RoomDto> GetRoomWithDetailsAsync(Guid roomId);
+        Task<bool> UpdateRoomCapacityAsync(Guid roomId, int numberOfBeds);
     }
 }

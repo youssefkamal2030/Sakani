@@ -59,7 +59,7 @@ namespace Sakni.Services.Implementations
             return _mapper.Map<IEnumerable<BedDto>>(beds);
         }
 
-        public async Task<IEnumerable<BedDto>> GetBedsByRoomIdAsync(int roomId, int? skip = null, int? take = null)
+        public async Task<IEnumerable<BedDto>> GetBedsByRoomIdAsync(Guid roomId, int? skip = null, int? take = null)
         {
             var beds = await _bedRepository.GetBedsByRoomIdAsync(roomId, skip, take);
             return _mapper.Map<IEnumerable<BedDto>>(beds);

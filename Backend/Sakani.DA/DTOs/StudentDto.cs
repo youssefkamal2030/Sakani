@@ -31,13 +31,13 @@ namespace Sakani.DA.DTOs
 
     public class UpdateStudentDto
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Fullname => $"{FirstName}{LastName}";
-        public string email { get; set; }
-        public string CollegeName { get; set; }
-        public int Age { get; set; }
-        public string Origin { get; set; }
-        public string ProfilePhoto { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Fullname => $"{FirstName}{LastName}";
+        public string? email { get; set; }
+        public string? CollegeName { get; set; }
+        public int? Age { get; set; }
+        public string? Origin { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 } 

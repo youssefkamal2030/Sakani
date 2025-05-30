@@ -5,7 +5,7 @@ namespace Sakani.DA.DTOs
 {
     public class RoomDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid ApartmentId { get; set; }
         public string RoomType { get; set; }
         public int NumberOfBeds { get; set; }
@@ -16,6 +16,7 @@ namespace Sakani.DA.DTOs
 
     public class CreateRoomDto
     {
+        public Guid ApartmentId { get; set; }
         public string RoomType { get; set; }
         public int NumberOfBeds { get; set; }
     }

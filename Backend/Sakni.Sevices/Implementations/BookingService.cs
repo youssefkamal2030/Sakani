@@ -115,7 +115,10 @@ namespace Sakni.Services.Implementations
             booking.Status = request.Status ?? booking.Status;
             booking.Confirmed = request.Confirmed;
             booking.Canceled = request.Canceled;
-            booking.TotalPrice = request.TotalPrice ?? booking.TotalPrice;
+
+            // Fix for CS0019: Use a conditional operator to handle the nullable decimal type
+            booking.TotalPrice = request.TotalPrice != null ? request.TotalPrice : booking.TotalPrice;
+
             booking.Notes = request.Notes ?? booking.Notes;
             booking.UpdatedAt = DateTime.UtcNow;
 

@@ -49,8 +49,16 @@ namespace Sakani.Controllers
         [HttpPost]
         public async Task<ActionResult<ApartmentDto>> CreateApartment([FromBody] CreateApartmentDto request)
         {
-            var apartment = await _apartmentService.CreateApartmentAsync(request);
-            return CreatedAtAction(nameof(GetApartmentById), new { id = apartment.ApartmentId }, apartment);
+            try
+            {
+                var apartment = await _apartmentService.CreateApartmentAsync(request);
+                return CreatedAtAction(nameof(GetApartmentById), new { id = apartment.ApartmentId }, apartment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [Authorize(Roles = "Owner , Admin")]

@@ -21,11 +21,19 @@ namespace Sakani.DA.Repositories
 
         public async Task<Room> AddAsync(Room entity)
         {
-            entity.CreatedAt = DateTime.UtcNow;
-            entity.UpdatedAt = DateTime.UtcNow;
-            await _context.Rooms.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                entity.CreatedAt = DateTime.UtcNow;
+                entity.UpdatedAt = DateTime.UtcNow;
+                await _context.Rooms.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+           
         }
 
         public async Task<int> CountAsync(Expression<Func<Room, bool>> filter = null)
@@ -44,7 +52,7 @@ namespace Sakani.DA.Repositories
 
         public async Task<bool> ExistsAsync(object id)
         {
-            return await _context.Rooms.AnyAsync(r => r.Id == (int)id);
+            return await _context.Rooms.AnyAsync(r => r.Id == (Guid)id);
         }
 
         public async Task<IEnumerable<Room>> FindAsync(Expression<Func<Room, bool>> predicate)
@@ -97,7 +105,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<Room> GetRoomWithBedsAsync(int roomId)
+        public async Task<Room> GetRoomWithBedsAsync(Guid roomId)
         {
             return await _context.Rooms
                 .Include(r => r.Beds)
@@ -118,7 +126,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<bool> UpdateRoomStatusAsync(int roomId, bool isAvailable)
+        public async Task<bool> UpdateRoomStatusAsync(Guid roomId, bool isAvailable)
         {
             var room = await _context.Rooms.FindAsync(roomId);
             if (room == null) return false;
@@ -152,7 +160,7 @@ namespace Sakani.DA.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<Room> GetRoomWithDetailsAsync(int roomId)
+        public async Task<Room> GetRoomWithDetailsAsync(Guid roomId)
         {
             return await _context.Rooms
                 .Include(r => r.Beds)
@@ -160,7 +168,7 @@ namespace Sakani.DA.Repositories
                 .FirstOrDefaultAsync(r => r.Id == roomId);
         }
 
-        public async Task<bool> UpdateRoomCapacityAsync(int roomId, int numberOfBeds)
+        public async Task<bool> UpdateRoomCapacityAsync(Guid roomId, int numberOfBeds)
         {
             var room = await _context.Rooms.FindAsync(roomId);
             if (room == null) return false;

@@ -84,7 +84,7 @@ namespace Sakani.DA.Repositories
             return await _context.Beds.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Bed>> GetBedsByRoomIdAsync(int roomId, int? skip = null, int? take = null)
+        public async Task<IEnumerable<Bed>> GetBedsByRoomIdAsync(Guid roomId, int? skip = null, int? take = null)
         {
             var query = _context.Beds.Where(b => b.RoomId == roomId);
 

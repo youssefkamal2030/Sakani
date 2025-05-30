@@ -22,26 +22,34 @@ namespace Sakni.Services.Implementations
 
         public async Task<RoomDto> CreateRoomAsync(CreateRoomDto request)
         {
-            var room = _mapper.Map<Room>(request);
-            room.CreatedAt = DateTime.UtcNow;
-            room.UpdatedAt = DateTime.UtcNow;
+            try
+            {
+                var room = _mapper.Map<Room>(request);
+                room.CreatedAt = DateTime.UtcNow;
+                room.UpdatedAt = DateTime.UtcNow;
 
-            var created = await _roomRepository.AddAsync(room);
-            return _mapper.Map<RoomDto>(created);
+                var created = await _roomRepository.AddAsync(room);
+                return _mapper.Map<RoomDto>(created);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
-        public async Task<bool> DeleteRoomAsync(int id)
+        public async Task<bool> DeleteRoomAsync(Guid id)
         {
             return await _roomRepository.DeleteAsync(id);
         }
 
-        public async Task<RoomDto> GetRoomByIdAsync(int id)
+        public async Task<RoomDto> GetRoomByIdAsync(Guid id)
         {
             var room = await _roomRepository.GetByIdAsync(id);
             return _mapper.Map<RoomDto>(room);
         }
 
-        public async Task<RoomDto> GetRoomWithBedsAsync(int roomId)
+        public async Task<RoomDto> GetRoomWithBedsAsync(Guid roomId)
         {
             var room = await _roomRepository.GetRoomWithBedsAsync(roomId);
             return _mapper.Map<RoomDto>(room);
@@ -64,18 +72,18 @@ namespace Sakni.Services.Implementations
             return _mapper.Map<IEnumerable<RoomDto>>(rooms);
         }
 
-        public async Task<RoomDto> GetRoomWithDetailsAsync(int roomId)
+        public async Task<RoomDto> GetRoomWithDetailsAsync(Guid roomId)
         {
             var room = await _roomRepository.GetRoomWithDetailsAsync(roomId);
             return _mapper.Map<RoomDto>(room);
         }
 
-        public async Task<bool> UpdateRoomCapacityAsync(int roomId, int numberOfBeds)
+        public async Task<bool> UpdateRoomCapacityAsync(Guid roomId, int numberOfBeds)
         {
             return await _roomRepository.UpdateRoomCapacityAsync(roomId, numberOfBeds);
         }
 
-        public async Task<RoomDto> UpdateRoomAsync(int id, UpdateRoomDto request)
+        public async Task<RoomDto> UpdateRoomAsync(Guid id, UpdateRoomDto request)
         {
             var room = await _roomRepository.GetByIdAsync(id);
             if (room == null) return null;

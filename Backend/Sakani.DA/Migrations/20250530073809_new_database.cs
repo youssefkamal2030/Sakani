@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sakani.DA.Migrations
 {
     /// <inheritdoc />
-    public partial class CleanMigrationToAddBedId : Migration
+    public partial class new_database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -286,8 +286,7 @@ namespace Sakani.DA.Migrations
                 name: "Rooms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberOfBeds = table.Column<int>(type: "int", nullable: false),
@@ -310,7 +309,7 @@ namespace Sakani.DA.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     studentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsAC = table.Column<bool>(type: "bit", nullable: false),

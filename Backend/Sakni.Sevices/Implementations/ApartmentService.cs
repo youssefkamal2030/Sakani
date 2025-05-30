@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Sakani.DA.DTOs;
 using Sakani.DA.Interfaces;
 using Sakani.Data.Models;
@@ -23,9 +24,17 @@ namespace Sakni.Services.Implementations
 
         public async Task<ApartmentDto> CreateApartmentAsync(CreateApartmentDto request)
         {
-            var apartment = _mapper.Map<Apartment>(request);
-            var createdApartment = await _unitOfWork.Apartments.AddAsync(apartment);
-            return _mapper.Map<ApartmentDto>(createdApartment);
+            try
+            {
+                var apartment = _mapper.Map<Apartment>(request);
+                var createdApartment = await _unitOfWork.Apartments.AddAsync(apartment);
+                return _mapper.Map<ApartmentDto>(createdApartment);
+            }
+            catch (Exception ex) { 
+                throw new Exception(ex.Message);
+               
+            }
+            
         }
 
         public async Task<bool> DeleteApartmentAsync(Guid id)

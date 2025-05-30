@@ -241,8 +241,8 @@ namespace Sakani.DA.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -413,11 +413,9 @@ namespace Sakani.DA.Migrations
 
             modelBuilder.Entity("Sakani.Data.Models.Room", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ApartmentId")
                         .HasColumnType("uniqueidentifier");

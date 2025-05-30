@@ -7,7 +7,7 @@ namespace Sakani.DA.Interfaces
 {
     public interface IBedRepository : IGenericRepository<Bed>
     {
-        Task<IEnumerable<Bed>> GetBedsByRoomIdAsync(int roomId, int? skip = null, int? take = null);
+        Task<IEnumerable<Bed>> GetBedsByRoomIdAsync(Guid roomId, int? skip = null, int? take = null);
         Task<Bed> GetBedWithStudentAsync(Guid bedId);
         Task<IEnumerable<Bed>> GetAvailableBedsAsync(int? skip = null, int? take = null);
         Task<bool> UpdateBedStatusAsync(Guid bedId, bool isVacant);

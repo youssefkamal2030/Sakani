@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sakani.DA.DTOs
 {
@@ -19,16 +20,22 @@ namespace Sakani.DA.DTOs
 
     public class CreateBookingDto
     {
+        [AllowNull]
         public Guid ApartmentId { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
     }
 
     public class UpdateBookingDto
     {
+        [AllowNull]
         public string Status { get; set; }
+        [AllowNull]
         public bool Confirmed { get; set; }
+        [AllowNull]
         public bool Canceled { get; set; }
-        public decimal? TotalPrice { get; set; }
+        [AllowNull]
+        public decimal TotalPrice { get; set; }
+        [AllowNull]
         public string Notes { get; set; }
     }
 } 
