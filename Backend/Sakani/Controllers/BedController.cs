@@ -9,7 +9,7 @@ namespace Sakani.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin,Owner")]
+    
     public class BedController : ControllerBase
     {
         private readonly IBedService _bedService;
@@ -20,7 +20,6 @@ namespace Sakani.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Owner")]
         public async Task<IActionResult> GetBedById(Guid id)
         {
             var bed = await _bedService.GetBedByIdAsync(id);
@@ -31,7 +30,6 @@ namespace Sakani.Controllers
         }
 
         [HttpGet("room/{roomId}")]
-        [Authorize(Roles = "Admin,Owner")]
         public async Task<IActionResult> GetBedsByRoomId(Guid roomId, [FromQuery] int? skip = null, [FromQuery] int? take = null)
         {
             var beds = await _bedService.GetBedsByRoomIdAsync(roomId, skip, take);
@@ -39,7 +37,6 @@ namespace Sakani.Controllers
         }
 
         [HttpGet("available")]
-        [Authorize(Roles = "Admin,Owner,Student")]
         public async Task<IActionResult> GetAvailableBeds([FromQuery] int? skip = null, [FromQuery] int? take = null)
         {
             var beds = await _bedService.GetAvailableBedsAsync(skip, take);

@@ -36,7 +36,6 @@ namespace Sakani.Data.Models
         [StringLength(255)]
         public string Location { get; set; }
 
-        [StringLength(255)]
         public string? MainImage { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

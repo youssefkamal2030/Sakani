@@ -9,7 +9,7 @@ namespace Sakani.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin,Student")]
+   
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -28,7 +28,6 @@ namespace Sakani.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Student")]
         public async Task<IActionResult> GetStudentById(Guid id)
         {
             var student = await _studentService.GetStudentByIdAsync(id);

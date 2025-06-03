@@ -33,23 +33,73 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return new AuthResponse { Success = false, Message = "User not found." };
-
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-        if (!result.Succeeded)
-            return new AuthResponse { Success = false, Message = "Invalid credentials." };
-
-        var token = await _tokenService.GenerateJwtToken(user);
-
-        return new AuthResponse
+        try
         {
-            Success = true,
-            Token = token.ToString(),
-            ExpiresAt = DateTime.UtcNow.AddHours(2),
-            User = null
-        };
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return new AuthResponse { Success = false, Message = "User not found." };
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!result.Succeeded)
+                return new AuthResponse { Success = false, Message = "Invalid credentials." };
+
+            string id = null;
+            string firstName = null;
+            string lastName = null;
+            string phoneNumber = null;
+
+            if (user.Role == UserRole.Student)
+            {
+                var student = await _studentService.GetStudentByUserIdAsync(user.Id);
+                if (student != null)
+                {
+                    id = student.StudentId.ToString();
+                    firstName = student.FirstName;
+                    lastName = student.LastName;
+                    phoneNumber = student.PhoneNumber;
+                }
+            }
+            else if (user.Role == UserRole.Owner)
+            {
+                var owner = await _ownerService.GetOwnerByUserIdAsync(user.Id);
+                if (owner != null)
+                {
+                    id = owner.OwnerId.ToString();
+                    firstName = owner.FirstName;
+                    lastName = owner.LastName;
+                    phoneNumber = owner.PhoneNumber;
+                }
+            }
+
+            var ResponseUser = new UserDto
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Id = id,
+                Email = user.Email,
+                PhoneNumber = phoneNumber,
+                Role = user.Role
+            };
+
+            var token = await _tokenService.GenerateJwtToken(user);
+
+            return new AuthResponse
+            {
+                Success = true,
+                Token = token.ToString(),
+                ExpiresAt = DateTime.UtcNow.AddHours(2),
+                User = ResponseUser,
+            };
+        }
+        catch (Exception ex)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "An error occurred during login.",
+                Errors = new List<string> { ex.Message }
+            };
+        }
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -60,10 +110,14 @@ public class AuthService : IAuthService
             var userExists = await _userManager.FindByEmailAsync(request.Email);
             if (userExists != null)
                 return new AuthResponse { Success = false, Message = "User already exists." };
+            if(request.Role.ToString()!= "Student" &&  request.Role.ToString()!= "Owner")
+            {
+                throw new Exception("Invalid Role Type ");
+            }
 
             var user = new User
             {
-                UserName = request.UserName,
+                UserName = request.Email,
                 Email = request.Email,
                 password = request.Password,
                 Role = (UserRole)Enum.Parse(typeof(UserRole), request.Role, ignoreCase:true)
@@ -101,7 +155,7 @@ public class AuthService : IAuthService
             return new AuthResponse
             {
                 Success = true,
-                User = new UserDto { Id = user.Id, Email = user.Email, Name = user.UserName,
+                User = new UserDto { Id = user.Id, Email = user.Email, FirstName = user.UserName,
                     Role = (UserRole)Enum.Parse(typeof(UserRole), request.Role, ignoreCase: true)                }
             };
         }

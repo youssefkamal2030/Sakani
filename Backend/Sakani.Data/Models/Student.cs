@@ -40,6 +40,9 @@ namespace Sakani.Data.Models
 
         [StringLength(255)]
         public string? ProfilePhoto { get; set; }
+        public string? Phonenumber { get; set; }
+
+        public string? Religon { get; set; }
 
         [StringLength(10)]
         public string? Gender { get; set; }

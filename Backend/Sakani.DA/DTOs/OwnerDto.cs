@@ -14,6 +14,8 @@ namespace Sakani.DA.DTOs
         public string Religion { get; set; }
         public string PhoneNumber { get; set; }
         public string ProfilePhoto { get; set; }
+        public string FrontId { get; set; }
+        public string BackId { get; set; }
         public string VerificationStatus { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -38,6 +40,8 @@ namespace Sakani.DA.DTOs
         public string? email { get; set; }
         public string? Residence { get; set; }
         public string? Religion { get; set; }
+        public string FrontId { get; set; }
+        public string BackId { get; set; }
         public string? PhoneNumber { get; set; }
         public string? ProfilePhoto { get; set; }
     }

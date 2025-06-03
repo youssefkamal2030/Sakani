@@ -123,5 +123,7 @@ namespace Sakni.Services.Implementations
         {
             return await _unitOfWork.Owners.GetTotalOwnersCountAsync();
         }
+
+        
     }
 }

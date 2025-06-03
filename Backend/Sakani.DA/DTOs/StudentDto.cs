@@ -14,8 +14,10 @@ namespace Sakani.DA.DTOs
         public string Origin { get; set; }
         public string ProfilePhoto { get; set; }
         public string Gender { get; set; }
+        public string Religon { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string? PhoneNumber { get; set; }
     }
 
     public class CreateStudentDto
@@ -25,6 +27,10 @@ namespace Sakani.DA.DTOs
         public string LastName { get; set; }
         public string? CollegeName { get; set; }
         public int? Age { get; set; }
+        public string? Religon { get; set; }
+        public string? ProfilePhoto { get; set; }
+        public string? PhoneNumber { get; set; }
+
         public string? Origin { get; set; }
         public string? Gender { get; set; }
     }
@@ -38,6 +44,10 @@ namespace Sakani.DA.DTOs
         public string? CollegeName { get; set; }
         public int? Age { get; set; }
         public string? Origin { get; set; }
+        public string? Religon { get; set; }
         public string? ProfilePhoto { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string Gender { get; set; }
+
     }
 } 

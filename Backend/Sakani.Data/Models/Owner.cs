@@ -44,6 +44,9 @@ namespace Sakani.Data.Models
 
         [StringLength(255)]
         public string? ProfilePhoto { get; set; }
+        
+        public string FrontId { get; set; }
+        public string BackId { get; set; }
 
         [StringLength(20)]
         public string VerificationStatus { get; set; } = "Not Verified";

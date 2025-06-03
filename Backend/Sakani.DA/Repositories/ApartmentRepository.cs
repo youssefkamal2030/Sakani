@@ -59,7 +59,11 @@ namespace Sakani.DA.Repositories
             int? skip = null,
             int? take = null)
         {
-            IQueryable<Apartment> query = _context.Apartments;
+            IQueryable<Apartment> query = _context.Apartments
+                .Include(a => a.Owner)
+                .Include(a => a.Rooms)
+                .ThenInclude(r => r.Beds)
+                .Include(a => a.Feedbacks);
 
             if (filter != null)
                 query = query.Where(filter);
